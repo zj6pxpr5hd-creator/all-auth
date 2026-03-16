@@ -1,6 +1,6 @@
 //saves register information in db
 
-const pool = require("/db/db") //imports connection with the db
+const pool = require("../db/db") //imports connection with the db
 
 const findUserByUsername = async (username) => {
 
@@ -8,7 +8,7 @@ const findUserByUsername = async (username) => {
         "SELECT * FROM users WHERE username = $1",
         [username]
     );
-    return result
+    return result.rows[0];
 
 };
 
@@ -18,6 +18,7 @@ const createUser = async (username, password_hash) => {
         "INSERT INTO users (username, password_hash) VALUES ($1, $2) RETURNING id, username",
         [username, password_hash]
     );
+    return result.rows[0];
 
 }
 

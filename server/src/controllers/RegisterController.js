@@ -44,10 +44,8 @@ const register = async (req, res) => {
         let accessToken, refreshToken;
         //one trycatch block handles errors for both tokens together
         try {
-        
-            accessToken = createAccessToken(newUser.id, username)
+            accessToken = createAccessToken(newUser.id, username);
             refreshToken = createRefreshToken(newUser.id, username);   
-        
         } catch (error) {
             return res.status(500).json({ message: "Token creation failed" });
         }

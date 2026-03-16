@@ -5,6 +5,10 @@ const Register = () => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -13,8 +17,43 @@ const Register = () => {
       return;
     }
 
+    sendRegister();
+
     console.log("form has been sent")
   }
+
+  const  sendRegister = async () => {
+    setLoading(true)
+    const data = { // user data
+      username: username,
+      password: password
+    }
+    try {
+      
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify(data)
+      });
+
+      if(!response.ok){
+        const data = await response.json(); //reads error message from api response
+        throw new Error(data.message || `Server Error: ${response.status}`);//throws an error with message or general server error message    
+      }
+
+      const result = await response.json();
+
+      console.log("success: ", result);
+
+    } catch (err) {
+      setError(err.message);
+      console.log(err);
+    } finally{
+      setLoading(false);
+    }
+  };
 
   return (
     <main className="register-page">
@@ -51,9 +90,9 @@ const Register = () => {
               required
             />
           </div>
-
+          {error.length!==0 && <p>Server Error</p>}
           <button className="submit-btn" type="submit">
-            Register
+            {loading ? "Loading" : "Register"}
           </button>
         </div>
       </form>

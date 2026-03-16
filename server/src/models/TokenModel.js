@@ -1,10 +1,10 @@
 //saves Token information in db
 
-const pool = require("/db/db") //imports connection with the db
+const pool = require("../db/db") //imports connection with the db
 
-const saveRefreshToken = (hashedRefreshToken, userId) => {
+const saveRefreshToken = async (hashedRefreshToken, userId) => {
 
-    const result = pool.query(
+    const result = await pool.query(
         "INSERT INTO refresh_tkn (user_id, tkn_hash) VALUES($1, $2) RETURNING id, tkn_hash",
         [userId, hashedRefreshToken]
     );
@@ -14,3 +14,4 @@ const saveRefreshToken = (hashedRefreshToken, userId) => {
 module.exports = {
     saveRefreshToken,
 }
+

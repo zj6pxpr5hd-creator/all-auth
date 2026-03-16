@@ -1,0 +1,1 @@
+Created Register functions (it works correctly with both access and refresh tokens)

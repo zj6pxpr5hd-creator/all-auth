@@ -1,15 +1,8 @@
 require("dotenv").config();
 
-//checks if JWT secrets have been initialized
-function requireEnv(name) {
-  if (!process.env[name]) {
-    throw new Error(`Missing env var: ${name}`);
-  }
-}
+const validateEnv = require("./src/config/validateEnv.js")
 
-requireEnv("JWT_ACCESS_SECRET");
-requireEnv("JWT_REFRESH_SECRET");
-//
+validateEnv();
 
 const app = require("./src/app.js");
 
