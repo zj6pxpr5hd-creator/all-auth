@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../styling/Register.css'
 
 const Register = () => {
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleSubmit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
+
+    if(!username.trim() || !password.trim()){
+      return;
+    }
+
+    console.log("form has been sent")
   }
 
   return (
@@ -16,6 +26,8 @@ const Register = () => {
           <div className="field">
             <label htmlFor="username">Username</label>
             <input
+              value={username}
+              onChange={(e) => {setUsername(e.target.value);}}
               id="username"
               name="username"
               type="text"
@@ -28,6 +40,8 @@ const Register = () => {
           <div className="field">
             <label htmlFor="password">Password</label>
             <input
+              value={password}
+              onChange={(e) => {setPassword(e.target.value)}}
               id="password"
               name="password"
               type="password"
