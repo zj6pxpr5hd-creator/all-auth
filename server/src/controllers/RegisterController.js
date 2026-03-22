@@ -2,7 +2,7 @@
 
 const bcrypt = require("bcryptjs"); // includes bcrypt library for encripting passwords and jwts
 const { createUser, findUserByUsername } = require("../models/RegisterModel"); // imports createUser and findUserByUsername function from RegisterModel
-const { saveRefreshToken } = require("../models/TokenModel"); // imports saveRefreshToken function from TokenModel
+const { saveNewRefreshToken } = require("../models/TokenModel"); // imports saveNewRefreshToken function from TokenModel
 const { createAccessToken, createRefreshToken } = require("./TokenController.js")
 
 const register = async (req, res) => {
@@ -55,8 +55,12 @@ const register = async (req, res) => {
         const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
 
         //8) save refresh token in db
-        const savedRefreshToken = await saveRefreshToken(hashedRefreshToken, newUser.id)
-        
+        const savedRefreshToken = await saveNewRefreshToken(hashedRefreshToken, newUser.id)
+        if(!savedRefreshToken){
+            res.status(500).json({ message: "Failed to save token"})
+        }
+
+
         //9)set httpOnly cookies containing tokens
         res.cookie("access_token", accessToken, {
             httpOnly: true,

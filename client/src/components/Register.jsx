@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import '../styling/Register.css'
 
 const Register = () => {
@@ -9,6 +10,7 @@ const Register = () => {
   const [error, setError] = useState("");
 
   const API_URL = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -35,6 +37,7 @@ const Register = () => {
                 headers: {
                     'Content-Type': 'application/json' 
                 },
+                credentials: "include",
                 body: JSON.stringify(data)
       });
 
@@ -44,8 +47,10 @@ const Register = () => {
       }
 
       const result = await response.json();
-
+      
       console.log("success: ", result);
+
+      navigate("/dashboard");
 
     } catch (err) {
       setError(err.message);
@@ -90,8 +95,8 @@ const Register = () => {
               required
             />
           </div>
-          {error.length!==0 && <p>Server Error</p>}
-          <button className="submit-btn" type="submit">
+          {error.length!==0 && <p>{error}</p>}
+          <button className="submit-btn" type="submit" disabled={loading}>
             {loading ? "Loading" : "Register"}
           </button>
         </div>

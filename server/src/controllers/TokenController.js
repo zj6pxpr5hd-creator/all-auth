@@ -21,8 +21,22 @@ const createRefreshToken = (id, username) => {
 
 }
 
+const checkAccessToken = (accessToken) => {
+    const result = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
+    return result;
+}
+
+const checkRefreshToken = (refreshToken) => {
+    const result = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    return result;
+}
+
+
+
 module.exports = {
     createAccessToken,
-    createRefreshToken
+    createRefreshToken,
+    checkAccessToken,
+    checkRefreshToken
 }
 

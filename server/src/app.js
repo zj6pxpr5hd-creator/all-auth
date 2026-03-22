@@ -2,12 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const pool = require("./db/db");
 const authRoutes = require("../src/routes/AuthRoutes.js")
+const cookieParser = require("cookie-parser")
 
 const app = express();
 
 //Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin: process.env.ORIGIN, credentials: true}));
+app.use(cookieParser())
 
 //my routes
 app.use("/api/auth/", authRoutes)
