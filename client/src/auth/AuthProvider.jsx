@@ -25,11 +25,11 @@ export const AuthProvider = ({ children }) => {
 
             const response = await fetch(`${API_URL}/api/auth/authenticate`, { credentials: "include" });
 
-            
+            const data = await response.json();
 
             if (!response.ok) {
                 // If the response is not ok, throw an error indicating the user is not authenticated.
-                throw new Error("User is not Authenticated");
+                throw new Error(data.message);
             } else {
                 // If the response is ok, set the authentication state to true.
                 setIsAuthed(true);

@@ -11,12 +11,12 @@ const saveNewRefreshToken = async (hashedRefreshToken, userId) => {
     return result.rows[0];
 };
 
-const retriveToken = async (userId) => {
+const retrieveToken = async (userId) => {
     const result = await pool.query(
         "SELECT tkn_hash FROM refresh_tkn WHERE user_id = $1",
         [userId]
     )
-    return result.rows[0];
+    return result.rows[0]?.tkn_hash;
 }
 
 const saveRefreshToken = async (hashedRefreshToken, userId) => {
@@ -30,6 +30,7 @@ const saveRefreshToken = async (hashedRefreshToken, userId) => {
 
 module.exports = {
     saveRefreshToken,
-    saveNewRefreshToken
+    saveNewRefreshToken,
+    retrieveToken
 }
 
