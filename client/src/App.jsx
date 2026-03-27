@@ -2,23 +2,24 @@
 import Register from './components/Register'
 import Dashboard from './components/Dashboard'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { useEffect } from 'react'
 import AuthProvider from './auth/AuthProvider'
-
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
 
-  //const [isAuthed, setIsAuthed] = useState(false);
-
-  useEffect
 
   return (
     
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Register />}/>
-          <Route path="/dashboard" element={<Dashboard />}/>
+          <Route path="/register" element={<Register />}/>
+          <Route path="/" element={         
+              <ProtectedRoute>
+                <Dashboard />          
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

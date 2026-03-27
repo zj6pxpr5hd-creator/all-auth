@@ -2,7 +2,7 @@ import { createContext, useEffect, useMemo, useState, useCallback } from "react"
 import React from 'react'
 
 // Create an empty context object that will be used to share the authentication state and functions between components.
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 // AuthProvider component that wraps the app to provide authentication context to all child components.
 export const AuthProvider = ({ children }) => {
