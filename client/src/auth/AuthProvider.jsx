@@ -14,7 +14,8 @@ export const AuthProvider = ({ children }) => {
 
     // Memoized context value that includes the authentication state. This prevents unnecessary re-renders of consumers.
     const contextValue = useMemo(() => ({
-        isAuthed
+        isAuthed,
+        setIsAuthed
     }), [isAuthed])
 
     // Function to authenticate the user by making an API call to the server.
