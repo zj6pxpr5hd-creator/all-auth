@@ -2,8 +2,7 @@
 
 const bcrypt = require("bcryptjs"); // includes bcrypt library for encripting passwords and jwts
 const { createUser, findUserByUsername } = require("../models/RegisterModel"); // imports createUser and findUserByUsername function from RegisterModel
-const { saveNewRefreshToken } = require("../models/TokenModel"); // imports saveNewRefreshToken function from TokenModel
-const { createAccessToken, createRefreshToken } = require("./TokenController.js")
+const { handleTokens } = require("./TokenController.js")
 
 const register = async (req, res) => {
 
@@ -39,44 +38,29 @@ const register = async (req, res) => {
         //4) create new user entry in db
         const newUser = await createUser(username, hashedPassword);
 
-        
-        //5) create access and refresh token
-        let accessToken, refreshToken;
-        //one trycatch block handles errors for both tokens together
-        try {
-            accessToken = createAccessToken(newUser.id, username);
-            refreshToken = createRefreshToken(newUser.id, username);   
-        } catch (error) {
-            return res.status(500).json({ message: "Token creation failed" });
-        }
+        //5) create and save tokens (handled by TokenController.js)
+        const result = await handleTokens(newUser.id, username)
 
-
-        //7) encript refresh token
-        const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
-
-        //8) save refresh token in db
-        const savedRefreshToken = await saveNewRefreshToken(hashedRefreshToken, newUser.id)
-        if(!savedRefreshToken){
+        if(!result.savedRefreshToken){
             res.status(500).json({ message: "Failed to save token"})
         }
 
-
-        //9)set httpOnly cookies containing tokens
-        res.cookie("access_token", accessToken, {
+        //6)set httpOnly cookies containing tokens
+        res.cookie("access_token", result.accessToken, {
             httpOnly: true,
             secure: false,
             sameSite: "lax",
             maxAge: 15 * 60 * 1000
         });
 
-        res.cookie("refresh_token", refreshToken, {
+        res.cookie("refresh_token", result.refreshToken, {
             httpOnly: true,
             secure: false,
             sameSite: "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        //10) Send response to frontend
+        //7) Send response to frontend
         res.status(200).json({ message: "User Created Successfully" })
 
 

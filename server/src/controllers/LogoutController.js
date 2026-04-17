@@ -25,7 +25,7 @@ const logout = async(req, res) => {
 
         //if refresh tkn isn't present in db sends back 404 error
         if(!isMatch){
-            return res.status(404).json({ message: "Token not found in DB" })
+            return res.status(404).json({ message: "Token does not match" })
         }
 
         //calls eliminate function from LogoutModel

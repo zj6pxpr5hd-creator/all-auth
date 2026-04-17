@@ -38,8 +38,8 @@ export const AuthProvider = ({ children }) => {
 
         } catch (error) {
             // Log the error to the console and set authentication state to false.
-            console.error(error);
             setIsAuthed(false);
+            console.error(error);
         }
     }, [API_URL]);
 
@@ -48,6 +48,10 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         authenticateUser();
     }, [authenticateUser])
+    
+    useEffect(() => {
+    console.log("isAuthed updated:", isAuthed);
+    }, [isAuthed]);
 
     // Render the AuthContext.Provider to make the context available to child components.
     return (

@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react'
+import { useNavigate, Link } from 'react-router-dom';
 import '../styling/Register.css'
+import { AuthContext } from '../auth/AuthProvider';
+
 
 const Register = () => {
 
@@ -11,6 +13,7 @@ const Register = () => {
 
   const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
+  const { setIsAuthed } = useContext(AuthContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -49,8 +52,8 @@ const Register = () => {
       const result = await response.json();
       
       console.log("success: ", result);
-
-      navigate("/dashboard");
+      setIsAuthed(true);
+      navigate("/");
 
     } catch (err) {
       setError(err.message);
@@ -99,8 +102,12 @@ const Register = () => {
           <button className="submit-btn" type="submit" disabled={loading}>
             {loading ? "Loading" : "Register"}
           </button>
+          <Link className="login" type="submit" disabled={loading} to = {{pathname: "/login"}}>
+            Login
+          </Link>          
         </div>
       </form>
+      
     </main>
   )
 }

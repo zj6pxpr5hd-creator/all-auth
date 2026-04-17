@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500&display=swap');
 
-.register-page {
+.login-page {
   --bg: #f6f2ea;
   --ink: #1c1b1a;
   --muted: #5f5b54;
@@ -28,7 +28,7 @@
   color-scheme: light;
 }
 
-.register-page::before {
+.login-page::before {
   content: '';
   position: absolute;
   inset: 12% auto auto -6%;
@@ -38,7 +38,7 @@
   background: radial-gradient(circle, rgba(15, 118, 110, 0.18), transparent 65%);
 }
 
-.register-page::after {
+.login-page::after {
   content: '';
   position: absolute;
   right: -80px;
@@ -49,7 +49,7 @@
   background: radial-gradient(circle, rgba(243, 212, 142, 0.35), transparent 65%);
 }
 
-.register-card {
+.login-card {
   position: relative;
   z-index: 1;
   width: min(420px, 100%);
@@ -60,13 +60,13 @@
   padding: 32px;
 }
 
-.register-card h1 {
+.login-card h1 {
   font-family: 'Space Grotesk', system-ui, sans-serif;
   margin: 0 0 6px;
   font-size: 28px;
 }
 
-.register-card p {
+.login-card p {
   margin: 0 0 22px;
   color: var(--muted);
 }
@@ -122,16 +122,16 @@
 }
 
 @media (max-width: 600px) {
-  .register-page {
+  .login-page {
     padding: 36px 18px;
   }
 
-  .register-card {
+  .login-card {
     padding: 26px;
   }
 }
 
-.login {
+.register {
   font-size: 0.8rem;
   margin: 0 auto;
   padding: 0;

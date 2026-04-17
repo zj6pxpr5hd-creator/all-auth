@@ -1,9 +1,11 @@
 ﻿import './App.css'
 import Register from './components/Register'
+import Login from './components/Login'
 import Dashboard from './components/Dashboard'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import AuthProvider from './auth/AuthProvider'
 import ProtectedRoute from './components/ProtectedRoute'
+import Loading from './components/Loading'
 
 function App() {
 
@@ -14,6 +16,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/register" element={<Register />}/>
+          <Route path="/login" element={<Login />}/>
+          <Route path="/loading" element={<Loading />}/>
           <Route path="/" element={         
               <ProtectedRoute>
                 <Dashboard />          

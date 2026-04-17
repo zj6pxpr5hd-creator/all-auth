@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500&display=swap');
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #f1e1c7 0%, transparent 60%),
+    radial-gradient(900px 500px at 95% 5%, #d6f2ee 0%, transparent 55%),
+    linear-gradient(180deg, #f6f2ea, #f2ebe1);
+  color: #1c1b1a;
+  padding: 56px 24px;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.loading-card {
+  width: 100%;
+  max-width: 600px;
+  background: #fffdf7;
+  border: 1px solid #e3dacd;
+  border-radius: 24px;
+  padding: 24px 30px;
+  box-shadow: 0 18px 45px rgba(21, 17, 12, 0.18);
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+}
+
+.blobA {
+  position: absolute;
+  inset: 12% auto auto -6%;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(15, 118, 110, 0.18), transparent 65%);
+}
+
+.blobB {
+  position: absolute;
+  right: -80px;
+  bottom: -120px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(243, 212, 142, 0.35), transparent 65%);
+}
+
+.title {
+  margin: 8px 0 6px 0;
+  font-size: 28px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+}
+
+.loader{
+  margin: 0 0 2em;
+  height: 100px;
+  width: 20%;
+  text-align: center;
+  padding: 1em;
+  margin: 0 auto 1em;
+  display: inline-block;
+  vertical-align: top;
+}
+
+/*
+  Set the color of the icon
+*/
+svg path,
+svg rect{
+  fill: #08060d;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 36px 18px;
+  }
+
+  .card {
+    padding: 22px 20px;
+  }
+}

@@ -6,14 +6,19 @@ import { AuthContext } from '../auth/AuthProvider';
 
 const Dashboard = () => {
   
+  const [loading, setLoading ] = useState(false);
   const [error, setError ] = useState("");
 
   const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const { setIsAuthed } = useContext(AuthContext);
 
-  const Logout = async () => {
+  const handleLogout = async () => {
+    setLoading(true);
+    Logout();
+  };
 
+  const Logout = async () => {
 
     try {      
 
@@ -28,12 +33,12 @@ const Dashboard = () => {
         navigate("/register");
       }
 
-
     } catch (error) {
         console.error(error.message);
         setError(error.message)
+    } finally {
+      setLoading(false);
     }
-    
 
   };
 
@@ -83,10 +88,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <button onClick={Logout} type="button" className="logoutButton">
-          Logout
+        <button onClick={ handleLogout} type="button" className="logoutButton">
+          {loading ? "Loading" : "Logout"}
         </button>
-        {error.lenght !== 0 && <p>{error}</p>}
+        {error.length !== 0 && <p>{error}</p>}
       </section>
     </main>
   )

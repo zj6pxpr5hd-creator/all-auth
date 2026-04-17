@@ -27,11 +27,14 @@ const authenticate = async (req, res) => {
     if(!user) return res.status(401).json({ ok: false, message: "Refresh Token isn't valid"});
     //retrieves user hashetRefreshToken to check if it matches the token from the cookies
     const hashedToken = await retrieveToken(user.id);
+    if(!hashedToken){
+        return res.status(401).json({ ok:false, message:"invalid refresh token"})
+    }
     const isMatch = await bcrypt.compare(refreshToken, hashedToken);
     if(!isMatch){
         return res.status(401).json({ok:false, message:"invalid refresh token"})}
     //if the tokens match the refresh token gets rotated and a new access and refresh token get sent back to the client
-    if(isMatch){
+
         //1) create access and refresh token
         let newAccessToken, newRefreshToken;
         
@@ -69,13 +72,12 @@ const authenticate = async (req, res) => {
         })
 
         return res.status(200).json({ ok: true, message: "user is authenticated, new tokens have been sent" });
-    }
-        return res.status(404).json({ ok:false, message:"Wrong Refresh Token has been sent"})
+
 
     } catch (error) {
-        
+        console.error(error);
+        return res.status(500).json({ ok:false, message:"Server Error"})
     }
-
 
 };
 

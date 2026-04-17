@@ -13,3 +13,6 @@ The refresh token is, instead, used to keep the user logged in for longer and ha
 
 ## Database
 As I said in the section about tokens, the refresh token is stored in a database. The database schema is really simple, there are only 2 tables one for users and one for refresh tokens. The main focus of the database is the foreign key in the tokens table which connects the 2 tables toghether. 
+
+## Logout
+From the Dashboard users can logout of their account. This eliminates their respective refresh token entry from the database, requiring them to login the next time they want to see the dashboard. Logging in checks for the existance of the user and the correctnes of the password, than creates an access and a refresh tokens which are both sent to the client as HTTPONLY cookies, while only the refresh token is saved in a new db entry.
