@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken"); //includes library for web tokens
 const bcrypt = require("bcryptjs");
-const { saveNewRefreshToken } = require("../models/TokenModel"); // imports saveRefreshToken function from TokenModel
+const { saveNewRefreshToken, saveRefreshToken } = require("../models/TokenModel"); // imports saveRefreshToken function from TokenModel
 
 
 const createAccessToken = (id, username) => {
@@ -43,7 +43,7 @@ const checkRefreshToken = (refreshToken) => {
     }
 }
 
-const handleTokens = async (userId, username) => {
+const handleTokens = async (userId, username, caller) => {
        
     
     // create access and refresh token
@@ -53,7 +53,7 @@ const handleTokens = async (userId, username) => {
         accessToken = createAccessToken(userId, username);
         refreshToken = createRefreshToken(userId, username);   
     } catch (error) {
-        return result = { ok: false};
+        return result = { ok: false, message: "Token creation failed"};
     }
 
     // encript refresh token
@@ -61,7 +61,14 @@ const handleTokens = async (userId, username) => {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
 
     // save refresh token in db
-    const savedRefreshToken = await saveNewRefreshToken(hashedRefreshToken, userId);
+    let savedRefreshToken;            
+  
+
+    if(caller === "authenticator"){
+        savedRefreshToken = await saveRefreshToken(hashedRefreshToken, userId);
+    } else {
+        savedRefreshToken = await saveNewRefreshToken(hashedRefreshToken, userId);
+    }
 
     const result = {
         refreshToken: refreshToken,

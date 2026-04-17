@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const { checkAccessToken, checkRefreshToken, createAccessToken, createRefreshToken } = require("./TokenController.js")
+const { checkAccessToken, checkRefreshToken, createAccessToken, createRefreshToken, handleTokens } = require("./TokenController.js")
 const { saveRefreshToken } = require("../models/TokenModel"); // imports saveRefreshToken function from TokenModel
 const { retrieveToken } = require("../models/TokenModel.js")
 
@@ -35,36 +35,26 @@ const authenticate = async (req, res) => {
         return res.status(401).json({ok:false, message:"invalid refresh token"})}
     //if the tokens match the refresh token gets rotated and a new access and refresh token get sent back to the client
 
-        //1) create access and refresh token
-        let newAccessToken, newRefreshToken;
-        
-        //2) create tokens; one trycatch block handles errors for both tokens together
-        try {
-            newAccessToken = createAccessToken(user.id, user.username);
-            newRefreshToken = createRefreshToken(user.id, user.username);   
-        } catch (error) {
-            return res.status(500).json({ message: "Token creation failed" });
+
+        const result = await handleTokens(user.id, user.username, "authenticator");
+
+        if(!result.ok){
+            console.log("ERROR", result.message)
+            return res.status(500).json({ ok: false, message: result.message})
         }
 
-
-        //3) encript refresh token
-        const salt = await bcrypt.genSalt(10);
-        const hashedRefreshToken = await bcrypt.hash(newRefreshToken, salt);
-
-        //4) save refresh token in db
-        const savedRefreshToken = await saveRefreshToken(hashedRefreshToken, user.id)
-        if(!savedRefreshToken){
+        if(!result.savedRefreshToken){
             return res.status(500).json({ message: "Failed to save token"})
         }
         //5)set httpOnly cookies containing tokens
-        res.cookie("access_token", newAccessToken, {
+        res.cookie("access_token", result.accessToken, {
             httpOnly: true,
             secure: false,
             sameSite: "lax",
             maxAge: 15 * 60 * 1000
         });
 
-        res.cookie("refresh_token", newRefreshToken, {
+        res.cookie("refresh_token", result.refreshToken, {
             httpOnly: true,
             secure: false,
             sameSite: "lax",

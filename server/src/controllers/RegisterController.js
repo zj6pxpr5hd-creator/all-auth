@@ -39,7 +39,7 @@ const register = async (req, res) => {
         const newUser = await createUser(username, hashedPassword);
 
         //5) create and save tokens (handled by TokenController.js)
-        const result = await handleTokens(newUser.id, username)
+        const result = await handleTokens(newUser.id, username, "register")
 
         if(!result.savedRefreshToken){
             res.status(500).json({ message: "Failed to save token"})

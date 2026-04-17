@@ -16,11 +16,10 @@ const login = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, hashedPassword);
 
-    
 
     if(!isMatch) return res.status(400).json({ message: "Password is wrong"});
 
-    const result = await handleTokens(user.id, username);
+    const result = await handleTokens(user.id, username, "login");
 
     
     if(!result.savedRefreshToken){

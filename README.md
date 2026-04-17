@@ -16,3 +16,6 @@ As I said in the section about tokens, the refresh token is stored in a database
 
 ## Logout
 From the Dashboard users can logout of their account. This eliminates their respective refresh token entry from the database, requiring them to login the next time they want to see the dashboard. Logging in checks for the existance of the user and the correctnes of the password, than creates an access and a refresh tokens which are both sent to the client as HTTPONLY cookies, while only the refresh token is saved in a new db entry.
+
+## General Structure
+
