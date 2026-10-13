@@ -3,6 +3,9 @@ const { handleTokens } = require("./TokenController.js")
 const bcrypt = require("bcryptjs");
 
 
+// Pre-computed dummy bcrypt hash to mitigate timing attacks when user does not exist
+const DUMMY_HASH = "$2a$10$e7V/4x3K0/Q.52R4n5r1/.mJ5E/3L4t4Y/2.4n5r1/.mJ5E/3L4t4";
+
 const login = async (req, res) => {
 
     try {
@@ -10,14 +13,15 @@ const login = async (req, res) => {
     const { username, password } = req.body;
 
     const user = await findUserByUsername(username);
-    if(!user) return res.status(404).json({ message: "User doesn't exists"});
 
-    const hashedPassword = user.password_hash;
+    // Run password comparison against real hash or dummy hash to prevent user enumeration via timing attack
+    const hashedPassword = user ? user.password_hash : DUMMY_HASH;
+    const isMatch = await bcrypt.compare(password || "", hashedPassword);
 
-    const isMatch = await bcrypt.compare(password, hashedPassword);
-
-
-    if(!isMatch) return res.status(400).json({ message: "Password is wrong"});
+    // Return generic error message and same status code to prevent user enumeration
+    if (!user || !isMatch) {
+        return res.status(401).json({ message: "Invalid username or password" });
+    }
 
     const result = await handleTokens(user.id, username, "login");
 
